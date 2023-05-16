@@ -17,9 +17,10 @@ jobs:
           sudo apt install -y aptitude
           sudo aptitude install -y texlive
       - name: install code2pdf
-        run: npm install -g ./codes2pdf
+        working-directory: ./codes2pdf
+        run: npm install -g
       - name: generate pdf
-        run: npx codes2pdf ./ -o code.pdf
+        run: npx codes2pdf ./src -o code.pdf
       - name: Create release
         id: create_release
         uses: actions/create-release@v1.0.0
