@@ -14,8 +14,8 @@ jobs:
       
       - name: Setup TeX Live
         run: |
-          apt install -y aptitude
-          aptitude install -y texlive
+          sudo apt install -y aptitude
+          sudo aptitude install -y texlive
       - name: install code2pdf
         run: npm install -g code2pdf
       - name: generate pdf
