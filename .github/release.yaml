@@ -23,7 +23,7 @@ jobs:
       - name: install code2pdf
         run: npm install -g code2pdf
       - name: generate pdf
-        run: codes2pdf ./ code.pdf
+        run: npx codes2pdf ./ code.pdf
       - name: Create release
         id: create_release
         uses: actions/create-release@v1.0.0
