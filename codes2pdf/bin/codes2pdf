@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+
+var codes2pdf = require('../codes2pdf.js');
+var program = require('commander');
+
+program
+  .version('1.0.5')
+  .usage('<source_dir> [options]')
+  .description('Auto generate a PDF notebook from your source codes')
+  .option('-a --author [name]', 'author\'s name to be added in the notebook')
+  .option('-i --initials [initials]', 'initials of the author to be placed in the upper-right corner of all pages')
+  .option('-o --output [filename]', 'output file for the notebook. Default to `./notebook.pdf`')
+
+
+program.parse(process.argv);
+
+if (program.args.length < 1) {
+  console.error('The source_dir is required.\nRun `codes2pdf --help`' );
+  process.exit(1);
+}
+
+program.output = program.output || './notebook.pdf';
+program.author = program.author || '';
+program.initials = program.initials || '';
+codes2pdf(program.args[0], program.output, program.author, program.initials);

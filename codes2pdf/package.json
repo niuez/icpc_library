@@ -1,0 +1,39 @@
+{
+  "name": "codes2pdf",
+  "version": "1.0.5",
+  "description": "Auto generate a PDF notebook from your source codes (useful for your ACM-ICPC cheatsheet)",
+  "main": "codes2pdf.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Erfaniaa/codes2pdf.git"
+  },
+  "keywords": [
+    "acm-icpc",
+    "acm",
+    "icpc",
+    "notebook",
+    "cheatsheet",
+    "pdf"
+  ],
+  "author": "Erfan Alimohammadi <erfan.aa@gmail.com> (http://github.com/Erfaniaa)",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Erfaniaa/codes2pdf/issues"
+  },
+  "homepage": "https://github.com/Erfaniaa/codes2pdf#readme",
+  "bin": {
+    "codes2pdf": "./bin/codes2pdf"
+  },
+  "dependencies": {
+    "commander": "^2.15.1",
+    "latex": "0.0.1",
+    "through2": "^2.0.0",
+    "tmp": "0.0.33"
+  },
+  "devDependencies": {
+    "standard": "^12.0.1"
+  }
+}
