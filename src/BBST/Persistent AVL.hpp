@@ -1,39 +1,32 @@
+#include <memory>
+#include <algorithm>
+#include <cassert>
+using namespace std;
+
 class persistent_avl_array {
   using T = char;
-
   struct node;
-
-  using node_type = typename shared_ptr<const node>;
-  using node_ref = const node_type&;
-  using value_type = T;
-  using value_ref = const value_type&;
-  using size_type = int;
-  using split_node_type = pair<node_type, node_type>;
-
-  static size_type size(node_ref n) {
+  using NT = shared_ptr<const node>;
+  using NR = const NT&;
+  using TR = const T&;
+  using split_NT = pair<NT, NT>;
+  static int size(NR n) {
     if(n) return n->sz;
     else return 0;
   }
-
-  static size_type height(node_ref n) {
+  static int height(NR n) {
     if(n) return n->he;
     else return 0;
   }
-
   struct node {
-    
-    using node_type = shared_ptr<const node>;
-    using node_ref = const node_type&;
-    using value_type = T;
-    using value_ref = const value_type&;
-    using size_type = int;
-
-    value_type val;
-    node_type ch[2];
-    size_type sz;
-    size_type he;
-
-    node(value_ref val, node_ref left, node_ref right)
+    using NT = shared_ptr<const node>;
+    using NR = const NT&;
+    using TR = const T&;
+    T val;
+    NT ch[2];
+    int sz;
+    int he;
+    node(TR val, NR left, NR right)
       : val(val) {
         sz = 1 + size(left) + size(right);
         he = 1 + max(height(left), height(right));
@@ -42,8 +35,7 @@ class persistent_avl_array {
         ch[1] = right;
       }
   };
-
-  static node_type balance(value_ref rootval, node_ref a, node_ref b) {
+  static NT balance(TR rootval, NR a, NR b) {
     if(height(a) - height(b) == 2) {
       if(height(a->ch[0]) - height(a->ch[1]) == -1)
         return make_shared<const node>(
@@ -75,87 +67,70 @@ class persistent_avl_array {
     else
       return make_shared<const node>(rootval, a, b);
   }
-
-  static node_ref back(node_ref node) {
+  static NR back(NR node) {
     if(node->ch[1]) return back(node->ch[1]);
     else return node;
   }
-
-  static node_type push_back(node_ref node, value_ref val) {
+  static NT push_back(NR node, TR val) {
     if(!node) return make_shared<const struct node>(val, nullptr, nullptr);
     else if(node->ch[1]) return merge(node->val, node->ch[0], push_back(node->ch[1], val));
     else return merge(node->val, node->ch[0], make_shared<const struct node>(val, nullptr, nullptr));
   }
-
-  static node_type pop_back(node_ref node) {
+  static NT pop_back(NR node) {
     if(node->ch[1]) return merge(node->val, node->ch[0], pop_back(node->ch[1]));
     else return node->ch[0];
   }
-
-  static node_type merge_1(value_ref rootval, node_ref dst, node_ref src) {
+  static NT merge_1(TR rootval, NR dst, NR src) {
     if(height(dst) - height(src) <= 1)
       return make_shared<const node>(rootval, dst, src);
     else
       return balance(dst->val, dst->ch[0], merge_1(rootval, dst->ch[1], src));
   }
-
-  static node_type merge_0(value_ref rootval, node_ref dst, node_ref src) {
+  static NT merge_0(TR rootval, NR dst, NR src) {
     if(height(dst) - height(src) <= 1)
       return make_shared<const node>(rootval, src, dst);
     else
       return balance(dst->val, merge_0(rootval, dst->ch[0], src), dst->ch[1]);
   }
-
-  static node_type merge(value_ref rootval, node_ref left, node_ref right) {
+  static NT merge(TR rootval, NR left, NR right) {
     if(height(left) >= height(right)) 
       return merge_1(rootval, left, right);
     else
       return merge_0(rootval, right, left);
   }
-
-  static split_node_type split(node_ref node, size_type i) {
+  static split_NT split(NR node, int i) {
     if(i == 0)
-      return split_node_type(node_type(), node);
+      return split_NT(NT(), node);
     else if(i <= size(node->ch[0])) {
       auto sp = split(node->ch[0], i);
-      return split_node_type(sp.first, merge(node->val, sp.second, node->ch[1]));
+      return split_NT(sp.first, merge(node->val, sp.second, node->ch[1]));
     }
     else {
       auto sp = split(node->ch[1], i - size(node->ch[0]) - 1);
-      return split_node_type(merge(node->val, node->ch[0], sp.first), sp.second);
+      return split_NT(merge(node->val, node->ch[0], sp.first), sp.second);
     }
   }
-
-  static node_ref at(node_ref node, size_type i) {
+  static NR at(NR node, int i) {
     if(i == size(node->ch[0])) return node;
     else if(i < size(node->ch[0])) return at(node->ch[0], i);
     else return at(node->ch[1], i - 1 - size(node->ch[0]));
   }
-
-  node_type root;
-
+  NT root;
 public:
-  
   using split_array_type = pair<persistent_avl_array, persistent_avl_array>;
-
   persistent_avl_array() {}
-  persistent_avl_array(node_ref r) : root(r) {}
-
+  persistent_avl_array(NR r) : root(r) {}
   persistent_avl_array merge(persistent_avl_array other) const {
     if(!root) return other;
     else return persistent_avl_array(merge(back(root)->val, pop_back(root), other.root));
   }
-
-  split_array_type split(size_type i) const {
+  split_array_type split(int i) const {
     auto p = split(root, i);
     return { persistent_avl_array(p.first), persistent_avl_array(p.second) };
   }
-
-  persistent_avl_array push_back(value_ref val) const {
+  persistent_avl_array push_back(TR val) const {
     return persistent_avl_array(push_back(root, val));
   }
-
-  size_type len() const { return size(root); }
-
-  value_ref at(size_type i) const { return at(root, i)->val; }
+  int len() const { return size(root); }
+  TR at(int i) const { return at(root, i)->val; }
 };

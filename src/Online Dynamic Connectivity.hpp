@@ -1,26 +1,23 @@
 const int NODE_SIZE = 303030 * 6;
 struct euler_tour_tree {
-  using value_type = long long;
-  using size_type = size_t;
-  using node_index = int_least32_t;
-  using vertex_index = int_least32_t;
+  using T = long long;
 
   struct node;
   static struct node n[NODE_SIZE];
-  static node_index ni;
+  static int ni;
 
   struct node {
-    vertex_index s, d;
-    node_index c[3];
+    int s, d;
+    int c[3];
     int sz;
     int flag;
-    value_type val;
-    value_type Sigma;
+    T val;
+    T Sigma;
     node(): sz(1) {}
-    inline node& operator[](size_type d) { return n[c[d]]; }
+    inline node& operator[](int d) { return n[c[d]]; }
   };
 
-  node_index new_edge(int s, int d, bool hi) {
+  int new_edge(int s, int d, bool hi) {
     int i = ni++;
     int ri = ni++;
     n[i].s = n[ri].d = s;
@@ -30,7 +27,7 @@ struct euler_tour_tree {
     return i;
   }
 
-  static void fix(node_index i) {
+  static void fix(int i) {
     n[i].sz = (n[i].s == n[i].d) ? 1 : 0;
     if(n[i].c[0]) n[i].sz += n[i][0].sz;
     if(n[i].c[1]) n[i].sz += n[i][1].sz;
@@ -43,7 +40,7 @@ struct euler_tour_tree {
     if(n[i].c[1]) n[i].Sigma += n[i][1].Sigma;
   }
 
-  static int child_dir(node_index i) {
+  static int child_dir(int i) {
     if(n[i].c[2]) {
       if(n[i][2].c[0] == i) { return 0; }
       else if(n[i][2].c[1] == i) { return 1; }
@@ -51,10 +48,10 @@ struct euler_tour_tree {
     return 2;
   }
 
-  static void rotate(node_index x, size_type dir) {
-    node_index p = n[x].c[2];
+  static void rotate(int x, int dir) {
+    int p = n[x].c[2];
     int x_dir = child_dir(x);
-    node_index y = n[x].c[dir ^ 1];
+    int y = n[x].c[dir ^ 1];
     if(n[y].c[dir]) n[y][dir].c[2] = x;
     n[x].c[dir ^ 1] = n[y].c[dir];
     n[n[x].c[2] = y].c[dir] = x;
@@ -64,13 +61,13 @@ struct euler_tour_tree {
     fix(x);
   }
 
-  static void splay(node_index i) {
+  static void splay(int i) {
     int i_dir;
     int j_dir;
     while((i_dir = child_dir(i)) < 2) {
-      node_index j = n[i].c[2];
+      int j = n[i].c[2];
       if((j_dir = child_dir(j)) < 2) {
-        node_index k = n[j].c[2];
+        int k = n[j].c[2];
         if(i_dir == j_dir) rotate(k, j_dir ^ 1), rotate(j, i_dir ^ 1);
         else rotate(j, i_dir ^ 1), rotate(k, j_dir ^ 1);
       }
@@ -79,7 +76,7 @@ struct euler_tour_tree {
     fix(i);
   }
 
-  static node_index merge_back(node_index l, node_index r) {
+  static int merge_back(int l, int r) {
     if(!l) return r;
     if(!r) return l;
     while(n[l].c[1]) l = n[l].c[1];
@@ -89,21 +86,21 @@ struct euler_tour_tree {
     return l;
   }
 
-  static pair<node_index, node_index> split(node_index i) {
+  static pair<int, int> split(int i) {
     splay(i);
-    node_index l = n[i].c[0];
+    int l = n[i].c[0];
     n[i].c[0] = n[l].c[2] = 0;
     fix(i);
     return { l, i };
   }
 
-  static void reroot(node_index v) {
+  static void reroot(int v) {
     auto p = split(v);
     merge_back(p.second, p.first);
     splay(v);
   }
 
-  static bool same_root(node_index i, node_index j) {
+  static bool same_root(int i, int j) {
     if(i) splay(i);
     if(j) splay(j);
     while(n[i].c[2]) i = n[i].c[2];
@@ -111,8 +108,8 @@ struct euler_tour_tree {
     return i == j;
   }
 
-  node_index n_start;
-  unordered_map<long long, node_index> emp;
+  int n_start;
+  unordered_map<long long, int> emp;
   euler_tour_tree() {}
   euler_tour_tree(int N): n_start(ni) {
     ni += N;
@@ -121,12 +118,12 @@ struct euler_tour_tree {
     }
   }
 
-  bool edge_exist(vertex_index x, vertex_index y) {
+  bool edge_exist(int x, int y) {
     if(x > y) swap(x, y);
     return emp.count(((long long)x << 32) | (long long)y);
   }
 
-  void link(vertex_index x, vertex_index y, bool hi) {
+  void link(int x, int y, bool hi) {
     if(x > y) swap(x, y);
     int ei = new_edge(x, y, hi);
     assert(!emp.count(((long long)x << 32) | (long long)y));
@@ -141,7 +138,7 @@ struct euler_tour_tree {
     merge_back(ei, ei + 1);
   }
 
-  void cut(vertex_index x, vertex_index y) {
+  void cut(int x, int y) {
     if(x > y) swap(x, y);
     auto iter = emp.find(((long long)x << 32) | (long long)y);
     int ei = iter->second;
@@ -151,9 +148,9 @@ struct euler_tour_tree {
     auto p = split(ei);
     if(p.first && same_root(p.first, rei)) {
       auto q = split(rei);
-      node_index left = q.first;
-      node_index center = n[q.second].c[1];
-      node_index right = n[p.second].c[1];
+      int left = q.first;
+      int center = n[q.second].c[1];
+      int right = n[p.second].c[1];
       n[center].c[2] = 0;
       n[right].c[2] = 0;
       merge_back(left, right);
@@ -164,25 +161,25 @@ struct euler_tour_tree {
       n[ei].c[2] = 0;
       auto q = split(rei);
       splay(p.first);
-      node_index left = p.first;
-      node_index center = q.first;
-      node_index right = n[q.second].c[1];
+      int left = p.first;
+      int center = q.first;
+      int right = n[q.second].c[1];
       n[right].c[2] = 0;
       merge_back(left, right);
     }
   }
 
-  bool same_tree(vertex_index x, vertex_index y) {
+  bool same_tree(int x, int y) {
     return same_root(x + n_start, y + n_start);
   }
 
-  int tree_size(vertex_index x) {
+  int tree_size(int x) {
     x += n_start;
     splay(x);
     return n[x].sz;
   }
 
-  void subedge_set(vertex_index x, bool val) {
+  void subedge_set(int x, bool val) {
     x += n_start;
     splay(x);
     if(val) n[x].flag |= (0b0100);
@@ -190,21 +187,21 @@ struct euler_tour_tree {
     fix(x);
   }
 
-  void add_val(vertex_index x, value_type val) {
+  void add_val(int x, T val) {
     x += n_start;
     splay(x);
     n[x].val += val;
     fix(x);
   }
-  value_type tree_sum(vertex_index x) {
+  T tree_sum(int x) {
     x += n_start;
     splay(x);
     return n[x].Sigma;
   }
 
   template<class Func>
-  void hilevel_edges(vertex_index v, Func f) {
-    node_index i = v + n_start;
+  void hilevel_edges(int v, Func f) {
+    int i = v + n_start;
     splay(i);
     while(i && (n[i].flag & 0b0010)) {
       while(1) {
@@ -221,8 +218,8 @@ struct euler_tour_tree {
     }
   }
   template<class Func>
-  int subedges(vertex_index v, Func f) {
-    node_index i = v + n_start;
+  int subedges(int v, Func f) {
+    int i = v + n_start;
     splay(i);
     while(i && (n[i].flag & 0b1000)) {
       while(1) {
@@ -240,19 +237,9 @@ struct euler_tour_tree {
     return 0;
   }
 
-
-  void debug_tree(node_index i, string indent) {
-    if(n[i].c[0]) {
-      debug_tree(n[i].c[0], indent + "l");
-    }
-    cout << " " << i << " = (" << n[i].s << " " << n[i].d << ")" << " p " << n[i].c[2] << endl;
-    if(n[i].c[1]) {
-      debug_tree(n[i].c[1], indent + "r");
-    }
-  }
 };
 
-euler_tour_tree::node_index euler_tour_tree::ni = 1;
+int euler_tour_tree::ni = 1;
 euler_tour_tree::node euler_tour_tree::n[NODE_SIZE];
 
 struct online_dynamic_connectivity {

@@ -20,24 +20,21 @@ namespace lctree {
   extern struct node n[505050];
   extern int ni;
 
-  using node_index = uint_least32_t;
-  using size_type = size_t;
-
   struct node {
-    node_index c[3];
+    int c[3];
     V v; V f; R r;
     bool rev;
     node(): rev(false) { c[0] = c[1] = c[2] = 0; }
     node& operator[](int d) { return n[c[d]]; }
   };
 
-  inline node_index new_node(V v) { n[ni].v = v; n[ni].f = v; return ni++; }
-  inline void reverse(node_index i) {
+  inline int new_node(V v) { n[ni].v = v; n[ni].f = v; return ni++; }
+  inline void reverse(int i) {
     n[i].v = reverse(n[i].v);
     n[i].f = reverse(n[i].f);
     n[i].rev ^= true;
   }
-  inline void push(node_index i) {
+  inline void push(int i) {
     if(n[i].rev) {
       swap(n[i].c[0], n[i].c[1]);
       if(n[i].c[0]) reverse(n[i].c[0]);
@@ -45,12 +42,12 @@ namespace lctree {
       n[i].rev = false;
     }
   }
-  inline void fix(node_index i) {
+  inline void fix(int i) {
     push(i);
     n[i].f = compress(compress(n[i][0].f, n[i].v), rake_merge(n[i][1].f, n[i].r));
   }
 
-  inline int child_dir(node_index i) {
+  inline int child_dir(int i) {
     if(n[i].c[2]) {
       if(n[i][2].c[0] == i) { return 0; }
       else if(n[i][2].c[1] == i) { return 1; }
@@ -58,10 +55,10 @@ namespace lctree {
     return 3;
   }
 
-  inline void rotate(node_index x, size_type dir) {
-    node_index p = n[x].c[2];
+  inline void rotate(int x, int dir) {
+    int p = n[x].c[2];
     int x_dir = child_dir(x);
-    node_index y = n[x].c[dir ^ 1];
+    int y = n[x].c[dir ^ 1];
 
     n[n[y][dir].c[2] = x].c[dir ^ 1] = n[y].c[dir];
     n[n[x].c[2] = y].c[dir] = x;
@@ -71,14 +68,14 @@ namespace lctree {
     fix(x);
   }
 
-  void splay(node_index i) {
+  void splay(int i) {
     push(i);
     int i_dir;
     int j_dir;
     while(child_dir(i) < 2) {
-      node_index j = n[i].c[2];
+      int j = n[i].c[2];
       if(child_dir(j) < 2) {
-        node_index k = n[j].c[2];
+        int k = n[j].c[2];
         push(k), push(j), push(i);
         i_dir = child_dir(i);
         j_dir = child_dir(j);
@@ -90,9 +87,9 @@ namespace lctree {
     fix(i);
   }
 
-  node_index expose(node_index i) {
-    node_index right = 0;
-    node_index ii = i;
+  int expose(int i) {
+    int right = 0;
+    int ii = i;
     while(i) {
       splay(i);
       rake_minus(n[i].r, n[right].f);
@@ -106,7 +103,7 @@ namespace lctree {
     return ii;
   }
 
-  void link(node_index i, node_index j) {
+  void link(int i, int j) {
     if(!i || !j) return;
     expose(i);
     expose(j);
@@ -114,15 +111,15 @@ namespace lctree {
     fix(i);
   }
 
-  void cut(node_index i) {
+  void cut(int i) {
     if(!i) return;
     expose(i);
-    node_index p = n[i].c[0];
+    int p = n[i].c[0];
     n[i].c[0] = n[p].c[2] = 0;
     fix(i);
   }
 
-  void evert(node_index i) {
+  void evert(int i) {
     if(!i) return;
     expose(i);
     reverse(i);
@@ -132,7 +129,7 @@ namespace lctree {
   node n[505050];
   int ni = 1;
 
-  int all_tree(node_index i) {
+  int all_tree(int i) {
     expose(i);
     return n[i].f.a;
   }

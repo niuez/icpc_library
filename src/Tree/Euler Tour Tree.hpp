@@ -1,21 +1,18 @@
 struct euler_tour_tree {
-  using size_type = size_t;
-  using node_index = int_least32_t;
-  using vertex_index = int_least32_t;
 
   struct node;
   static struct node n[2020];
-  static node_index ni;
+  static int ni;
 
   struct node {
-    vertex_index s, d;
-    node_index c[3];
+    int s, d;
+    int c[3];
     int sz;
     node(): sz(1) {}
-    inline node& operator[](size_type d) { return n[c[d]]; }
+    inline node& operator[](int d) { return n[c[d]]; }
   };
 
-  node_index new_edge(int s, int d) {
+  int new_edge(int s, int d) {
     int i = ni++;
     int ri = ni++;
     n[i].s = n[ri].d = s;
@@ -23,13 +20,13 @@ struct euler_tour_tree {
     return i;
   }
 
-  static void fix(node_index i) {
+  static void fix(int i) {
     n[i].sz = (n[i].s == n[i].d) ? 1 : 0;
     if(n[i].c[0]) n[i].sz += n[i][0].sz;
     if(n[i].c[1]) n[i].sz += n[i][1].sz;
   }
 
-  static int child_dir(node_index i) {
+  static int child_dir(int i) {
     if(n[i].c[2]) {
       if(n[i][2].c[0] == i) { return 0; }
       else if(n[i][2].c[1] == i) { return 1; }
@@ -37,10 +34,10 @@ struct euler_tour_tree {
     return 2;
   }
 
-  static void rotate(node_index x, size_type dir) {
-    node_index p = n[x].c[2];
+  static void rotate(int x, int dir) {
+    int p = n[x].c[2];
     int x_dir = child_dir(x);
-    node_index y = n[x].c[dir ^ 1];
+    int y = n[x].c[dir ^ 1];
     if(n[y].c[dir]) n[y][dir].c[2] = x;
     n[x].c[dir ^ 1] = n[y].c[dir];
     n[n[x].c[2] = y].c[dir] = x;
@@ -50,13 +47,13 @@ struct euler_tour_tree {
     fix(x);
   }
 
-  static void splay(node_index i) {
+  static void splay(int i) {
     int i_dir;
     int j_dir;
     while((i_dir = child_dir(i)) < 2) {
-      node_index j = n[i].c[2];
+      int j = n[i].c[2];
       if((j_dir = child_dir(j)) < 2) {
-        node_index k = n[j].c[2];
+        int k = n[j].c[2];
         if(i_dir == j_dir) rotate(k, j_dir ^ 1), rotate(j, i_dir ^ 1);
         else rotate(j, i_dir ^ 1), rotate(k, j_dir ^ 1);
       }
@@ -65,7 +62,7 @@ struct euler_tour_tree {
     fix(i);
   }
 
-  static node_index merge_back(node_index l, node_index r) {
+  static int merge_back(int l, int r) {
     if(!l) return r;
     if(!r) return l;
     while(n[l].c[1]) l = n[l].c[1];
@@ -75,21 +72,21 @@ struct euler_tour_tree {
     return l;
   }
 
-  static std::pair<node_index, node_index> split(node_index i) {
+  static std::pair<int, int> split(int i) {
     splay(i);
-    node_index l = n[i].c[0];
+    int l = n[i].c[0];
     n[i].c[0] = n[l].c[2] = 0;
     fix(i);
     return { l, i };
   }
 
-  static void reroot(node_index v) {
+  static void reroot(int v) {
     auto p = split(v);
     merge_back(p.second, p.first);
     splay(v);
   }
 
-  static bool same_root(node_index i, node_index j) {
+  static bool same_root(int i, int j) {
     if(i) splay(i);
     if(j) splay(j);
     while(n[i].c[2]) i = n[i].c[2];
@@ -97,7 +94,7 @@ struct euler_tour_tree {
     return i == j;
   }
 
-  node_index n_start;
+  int n_start;
   euler_tour_tree(int N): n_start(ni) {
     ni += N;
     for(int i = 0; i < N; i++) {
@@ -106,7 +103,7 @@ struct euler_tour_tree {
   }
 
 
-  node_index link(vertex_index x, vertex_index y) {
+  int link(int x, int y) {
     int ei = new_edge(x, y);
     x += n_start;
     y += n_start;
@@ -119,14 +116,14 @@ struct euler_tour_tree {
     return ei;
   }
 
-  void cut(node_index ei) {
+  void cut(int ei) {
     int rei = ei + 1;
     auto p = split(ei);
     if(same_root(p.first, rei)) {
       auto q = split(rei);
-      node_index left = q.first;
-      node_index center = n[q.second].c[1];
-      node_index right = n[p.second].c[1];
+      int left = q.first;
+      int center = n[q.second].c[1];
+      int right = n[p.second].c[1];
       n[center].c[2] = 0;
       n[right].c[2] = 0;
       merge_back(left, right);
@@ -137,15 +134,15 @@ struct euler_tour_tree {
       n[ei].c[2] = 0;
       auto q = split(rei);
       splay(p.first);
-      node_index left = p.first;
-      node_index center = q.first;
-      node_index right = n[q.second].c[1];
+      int left = p.first;
+      int center = q.first;
+      int right = n[q.second].c[1];
       n[right].c[2] = 0;
       merge_back(left, right);
     }
   }
 };
 
-euler_tour_tree::node_index euler_tour_tree::ni = 1;
+int euler_tour_tree::ni = 1;
 euler_tour_tree::node euler_tour_tree::n[2020];
 
