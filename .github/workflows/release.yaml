@@ -17,13 +17,24 @@ jobs:
           sudo apt install -y aptitude
           sudo aptitude install -y texlive
 
+      - name: Build hash
+        run: g++ "src/aaa hash.cpp" -std=c++17 -O3 -o hash
+
+      - name: Generate code with hash
+        working-directory: src
+        run: |
+          mkdir -p ../dist
+          find . -name '*' | while read line; do
+            ../hash < ${line} > "../dist/${line}"
+          done
+
       - name: install code2pdf
         working-directory: ./codes2pdf
         run: npm install
 
       - name: generate pdf
         working-directory: ./codes2pdf
-        run: npx codes2pdf ../src -o ../code.pdf
+        run: npx codes2pdf ../dist -o ../code.pdf
 
       - name: Create release
         id: create_release
