@@ -26,8 +26,8 @@ jobs:
         run: |
           mkdir -p ../dist
           find . -name '*' -type f | while read line; do
-            mkdir -p "${line%/*}"
-            ../hash < "${line}" > "../dist/${line#./}"
+            mkdir -p "../dist/${line%/*}"
+            ../hash < "${line}" > "../dist/${line}"
           done
 
       - name: install code2pdf
