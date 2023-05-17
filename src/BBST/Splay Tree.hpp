@@ -32,8 +32,8 @@ struct splay_array {
   static void reverse(int i) {
     if(!i) return;
     n[i].rev ^= true;
-    /* here reversing operation */
-    /* example swap(fold, revfold) */
+    // here reversing operation
+    // example swap(fold, revfold)
   }
   static void push(int i) {
     if(!i) return;
@@ -147,7 +147,7 @@ struct splay_array {
     root = merge_raw(n[endn].c[0], right.root);
     endn = right.endn;
   }
-  /* i は右 戻り値は左 */
+  // i belong right, return left
   splay_array split(int i) {
     splay(root = i);
     i = n[root].c[0];

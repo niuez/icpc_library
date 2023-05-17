@@ -1,9 +1,7 @@
-/*
-## calc dp[i][j] = min[i<=k<j](dp[i][k] + dp[k + 1][j]) + f(i,j). takes O(N^2) and Memory O(N^2)
-## f is required of Quandrangle Inequality and Monotone on the Lattice Intervals.
-## QI ... f(a or b) + f(a and b) >= f(a) + f(b)
-## MLI ...if a is partial of b , f(a) <= f(b)
-*/
+// calc dp[i][j] = min[i<=k<j](dp[i][k] + dp[k + 1][j]) + f(i,j). takes O(N^2) and Memory O(N^2)
+// f is required of Quandrangle Inequality and Monotone on the Lattice Intervals.
+// QI ... f(a or b) + f(a and b) >= f(a) + f(b)
+// MLI ...if a is partial of b , f(a) <= f(b)
 template<typename F>
 int mongeDP(int N, F f) {
   vector<vector<int>> dp(N, vector<int>(N, 1e18));

@@ -3,9 +3,9 @@ struct dynamic_slide_min {
   const int k;
   deque<pair<int, T>> que;
   int i;
-  /* k := length of slide */
+  // k := length of slide
   dynamic_slide_min(const int k): k(k), i(0) {}
-  /* return min value in slide k after inserting x */
+  // return min value in slide k after inserting
   T next(T x) {
     while(!que.empty() && que.back().second >= x) que.pop_back();
     que.push_back({i, x});

@@ -1,7 +1,3 @@
-/*
- * 文字列S[0, i-1]のprefixとsuffixが最大何文字一致しているか
- */
-
 vector<int> mp(string S) {
   vector<int> A(S.size() + 1);
   A[0] = -1;

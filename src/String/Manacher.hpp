@@ -1,7 +1,3 @@
-/*
- * 文字 i を中心とする最長の回文の半径 = (全長 + 1) / 2
- */
-
 vector<int> manacher(string S) {
   vector<int> R(S.size());
   int i = 0, j = 0;

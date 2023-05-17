@@ -20,7 +20,7 @@ struct sparse_table {
       }
     }
   }
-  /* [s, t) */
+  // [s, t)
   Band query(int s, int t) {
     int k = __lg(t - s);
     return ope(table[k][s], table[k][t - (1 << k)]);

@@ -42,12 +42,10 @@ struct pairing_heap {
     return x;
   }
   
-  /* return compest element */
   T top() {
     return root->val;
   }
 
-  /* pop compest element */
   void pop() {
     --sz;
     node* te = root;
@@ -55,18 +53,15 @@ struct pairing_heap {
     delete te, te = nullptr;
   }
   
-  /* add element */
   void push(const T& x) {
     ++sz;
     root = merge(new node(x), root);
   }
   
-  /* size */
   int size() {
     return sz;
   }
   
-  /* merge heap */
   void meld(pairing_heap<T,Compare>& h) {
     root = merge(root, h.root);
     h.root = nullptr;

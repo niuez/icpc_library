@@ -1,8 +1,3 @@
-#include <memory>
-#include <algorithm>
-#include <cassert>
-using namespace std;
-
 class persistent_avl_array {
   using T = char;
   struct node;
