@@ -24,7 +24,7 @@ jobs:
         working-directory: src
         run: |
           mkdir -p ../dist
-          find . -name '*' | while read line; do
+          find . -name '*' -type f | while read line; do
             ../hash < ${line} > "../dist/${line}"
           done
 
