@@ -19,7 +19,7 @@ jobs:
           sudo aptitude install -y texlive
 
       - name: Build hash
-        run: g++ "src/aaa hash.cpp" -std=c++17 -O3 -o hash
+        run: g++ "src/AAA Hash.cpp" -std=c++17 -O3 -o hash
 
       - name: Generate code with hash
         working-directory: src
