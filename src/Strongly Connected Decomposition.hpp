@@ -26,7 +26,7 @@ struct strongly_connected_components {
   void rdfs(int v, int k) {
     vis[v] = 1;
     group[v] = k;
-    comps.back().push_back(k);
+    comps.back().push_back(v);
     for(auto to: rg[v]) {
       if(!vis[to]) rdfs(to, k);
     }
