@@ -1,29 +1,32 @@
 using i64 = long long;
-template<i64 M> struct modint {
+template<i64 MD> struct modint {
+  using M = modint<MD>;
   i64 a;
-  constexpr modint(const i64 x = 0): a((x%M+M)%M){}
-  constexpr i64 value() const { return a; }
-  constexpr modint inv() const { return this->pow(M-2); }
-  constexpr modint pow(i64 r) const {
-    modint ans(1); modint aa = *this;
-    while(r) { if(r & 1) ans *= aa; aa *= aa; r >>= 1; }
+  modint(const i64 x = 0): a((x%MD+MD)%MD){}
+  M& s(i64 v) {
+    a = v < MD ? v : v - MD;
+    return *this;
+  }
+  i64 value() const { return a; }
+  M inv() const { return this->pow(MD-2); }
+  M pow(i64 r) const {
+    M ans(1);
+    M x = *this;
+    while(r) {
+      if(r & 1) ans *= x;
+      x *= x;
+      r >>= 1;
+    }
     return ans;
   }
-  constexpr bool operator==(const modint& r) const { return a == r.a; }
-  constexpr bool operator!=(const modint& r) const { return a != r.a; }
-  constexpr modint& operator=(const i64 r) { a = (r % M + M) % M; return *this; }
-  constexpr modint& operator+=(const modint r) { a += r.a; if(a >= M) a -= M; return *this; }
-  constexpr modint& operator-=(const modint r) { a -= r.a; if(a < 0) a += M; return *this; }
-  constexpr modint& operator*=(const modint r) { a = a * r.a % M; return *this; }
-  constexpr modint& operator/=(const modint r) { (*this) *= r.inv(); return *this; }
-  constexpr modint operator+(const modint r) const { return modint(*this) += r; }
-  constexpr modint operator-(const modint r) const { return modint(*this) -= r; }
-  constexpr modint operator-() const { return modint(0) - modint(*this); }
-  constexpr modint operator*(const modint r) const { return modint(*this) *= r; }
-  constexpr modint operator/(const modint r) const { return modint(*this) /= r; }
-  constexpr bool operator!=(const modint r) const { return this->value() != r.value(); }
+  M& operator+=(M r) { return s(a + r.a); }
+  M& operator-=(M r) { return s(a + MD - r.a); }
+  M& operator*=(M r) { return s(a * r.a % MD); }
+  M& operator/=(M r) { return *this *= r.inv(); }
+  M operator+(M r) const { return M(*this) += r; }
+  M operator-(M r) const { return M(*this) -= r; }
+  M operator*(M r) const { return M(*this) *= r; }
+  M operator/(M r) const { return M(*this) /= r; }
+  M operator-() const { return M(0) - M(*this); }
 };
-
-template<const i64 M> ostream& operator<<(ostream& os, const modint<M>& m) { os << m.value(); return os; }
-
-
+template<const i64 MD> ostream& operator<<(ostream& os, const modint<MD>& m) { return os << m.value(); }
