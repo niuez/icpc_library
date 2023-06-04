@@ -7,7 +7,7 @@ void superset_zeta_transform(int n, vector<T>& a) {
       }
     }
   }
-}
+}///
 template<class T>
 void subset_zeta_transform(int n, vector<T>& a) {
   for (int k = 0; k < n; ++k) {
@@ -17,7 +17,7 @@ void subset_zeta_transform(int n, vector<T>& a) {
       }
     }
   }
-}
+}///
 template<class T>
 void superset_mobius_transform(int n, vector<T>& a) {
   for (int k = 0; k < n; ++k) {
@@ -27,7 +27,7 @@ void superset_mobius_transform(int n, vector<T>& a) {
       }
     }
   }
-}
+}///
 
 template<class T>
 void subset_mobius_transform(int n, vector<T>& a) {
@@ -38,4 +38,4 @@ void subset_mobius_transform(int n, vector<T>& a) {
       }
     }
   }
-}
+}///

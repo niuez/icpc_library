@@ -13,7 +13,7 @@ void divisor_transform(vector<T> &a) {
 	for (int i = 0; ++i != n;) {
 		a[i] += a[0];
 	}
-}
+}///
 
 template <class T>
 void inverse_divisor_transform(vector<T> &a) {
@@ -30,5 +30,4 @@ void inverse_divisor_transform(vector<T> &a) {
 			}
 		}
 	}
-}
-
+}///

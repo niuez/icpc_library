@@ -15,7 +15,7 @@ struct splay_array {
 
     node() {}
     node& operator[](int dir) { return n[c[dir]]; }
-  };
+  };///
   static int new_node(const V& key, const V& val) {
     int i = ni++;
     n[i].key = key;
@@ -23,18 +23,18 @@ struct splay_array {
     n[i].f = val;
     n[i].sz = 1;
     return i;
-  }
+  }///
   static void fix(int i) {
     if(!i) return;
     n[i].sz = 1 + n[i][0].sz + n[i][1].sz;
     n[i].f = n[i][0].f + n[i].val + n[i][1].f;
-  }
+  }///
   static void reverse(int i) {
     if(!i) return;
     n[i].rev ^= true;
     // here reversing operation
     // example swap(fold, revfold)
-  }
+  }///
   static void push(int i) {
     if(!i) return;
     if(n[i].rev) {
@@ -43,14 +43,14 @@ struct splay_array {
       reverse(n[i].c[1]);
       n[i].rev = false;
     }
-  }
+  }///
   static int child_dir(int i) {
     if(n[i].c[2]) {
       if(n[i][2].c[0] == i) return 0;
       return 1;
     }
     return 2;
-  }
+  }///
   static void rotate(int x, int dir) {
     int p = n[x].c[2];
     int x_dir = child_dir(x);
@@ -62,7 +62,7 @@ struct splay_array {
     if(p) n[p].c[x_dir] = y;
     fix(n[x].c[dir ^ 1]);
     fix(x);
-  }
+  }///
   static void splay(int i) {
     push(i);
     int i_dir;
@@ -80,18 +80,18 @@ struct splay_array {
       else push(j), push(i), rotate(j, child_dir(i) ^ 1);
     }
     fix(i);
-  }
+  }///
   static int leftist_node(int i) {
     if(push(i), n[i].c[0]) i = n[i].c[0];
     return i;
-  }
+  }///
   static int merge_raw(int l, int r) {
     int leftist = leftist_node(r);
     splay(leftist);
     n[n[l].c[2] = leftist].c[0] = l;
     fix(leftist);
     return leftist;
-  }
+  }///
   int endn;
   int root;
   splay_array() {}
@@ -102,6 +102,7 @@ struct splay_array {
     fix(root);
   }
   int end_node() const { return endn; }
+  ///
   int find_by_index(int pos) {
     int i = root;
     while(push(i), n[i][0].sz != pos) {
@@ -115,7 +116,7 @@ struct splay_array {
     }
     splay(root = i);
     return i;
-  }
+  }///
   int lower_bound_by_key(const K& key) {
     int i = root;
     int p = endn;
@@ -137,16 +138,16 @@ struct splay_array {
     }
     splay(root = p);
     return p;
-  }
+  }///
   void splay_node(int i) {
     splay(root = i);
-  }
+  }///
   void merge(splay_array right) {
     splay(endn);
     root = n[endn].c[0];
     root = merge_raw(n[endn].c[0], right.root);
     endn = right.endn;
-  }
+  }///
   // i belong right, return left
   splay_array split(int i) {
     splay(root = i);
@@ -154,7 +155,7 @@ struct splay_array {
     n[i].c[2] = n[root].c[0] = 0;
     fix(root);
     return splay_array(i);
-  }
+  }///
   void insert_dir(int i, int target, int dir) {
     splay(root = i);
     int x = n[i].c[dir];
@@ -162,7 +163,7 @@ struct splay_array {
     n[n[x].c[2] = target].c[dir] = x;
     fix(target);
     fix(i);
-  }
+  }///
   void erase(int i) {
     assert(endn != i);
     splay(root = i);
@@ -170,7 +171,7 @@ struct splay_array {
     int r = n[i].c[1];
     n[l].c[2] = n[r].c[2] = n[i].c[0] = 0;
     root = merge_raw(l, r);
-  }
+  }///
 };
 
 template<class K, class V>

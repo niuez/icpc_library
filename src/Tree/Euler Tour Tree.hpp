@@ -10,7 +10,7 @@ struct euler_tour_tree {
     int sz;
     node(): sz(1) {}
     inline node& operator[](int d) { return n[c[d]]; }
-  };
+  }///;///
 
   int new_edge(int s, int d) {
     int i = ni++;
@@ -18,13 +18,13 @@ struct euler_tour_tree {
     n[i].s = n[ri].d = s;
     n[i].d = n[ri].s = d;
     return i;
-  }
+  }//////
 
   static void fix(int i) {
     n[i].sz = (n[i].s == n[i].d) ? 1 : 0;
     if(n[i].c[0]) n[i].sz += n[i][0].sz;
     if(n[i].c[1]) n[i].sz += n[i][1].sz;
-  }
+  }///
 
   static int child_dir(int i) {
     if(n[i].c[2]) {
@@ -32,7 +32,7 @@ struct euler_tour_tree {
       else if(n[i][2].c[1] == i) { return 1; }
     }
     return 2;
-  }
+  }///
 
   static void rotate(int x, int dir) {
     int p = n[x].c[2];
@@ -45,7 +45,7 @@ struct euler_tour_tree {
     if(x_dir < 2) n[p].c[x_dir] = y;
     if(n[x].c[dir ^ 1]) fix(n[x].c[dir ^ 1]);
     fix(x);
-  }
+  }///
 
   static void splay(int i) {
     int i_dir;
@@ -60,7 +60,7 @@ struct euler_tour_tree {
       else rotate(j, i_dir ^ 1);
     }
     fix(i);
-  }
+  }///
 
   static int merge_back(int l, int r) {
     if(!l) return r;
@@ -70,7 +70,7 @@ struct euler_tour_tree {
     n[n[r].c[2] = l].c[1] = r;
     fix(l);
     return l;
-  }
+  }///
 
   static std::pair<int, int> split(int i) {
     splay(i);
@@ -78,13 +78,13 @@ struct euler_tour_tree {
     n[i].c[0] = n[l].c[2] = 0;
     fix(i);
     return { l, i };
-  }
+  }///
 
   static void reroot(int v) {
     auto p = split(v);
     merge_back(p.second, p.first);
     splay(v);
-  }
+  }///
 
   static bool same_root(int i, int j) {
     if(i) splay(i);
@@ -92,7 +92,7 @@ struct euler_tour_tree {
     while(n[i].c[2]) i = n[i].c[2];
     while(n[j].c[2]) j = n[j].c[2];
     return i == j;
-  }
+  }///
 
   int n_start;
   euler_tour_tree(int N): n_start(ni) {
@@ -100,7 +100,7 @@ struct euler_tour_tree {
     for(int i = 0; i < N; i++) {
       n[i + n_start].s = n[i + n_start].d = i;
     }
-  }
+  }///
 
 
   int link(int x, int y) {
@@ -114,7 +114,7 @@ struct euler_tour_tree {
     fix(ei);
     merge_back(ei, ei + 1);
     return ei;
-  }
+  }///
 
   void cut(int ei) {
     int rei = ei + 1;
@@ -140,7 +140,7 @@ struct euler_tour_tree {
       n[right].c[2] = 0;
       merge_back(left, right);
     }
-  }
+  }///
 };
 
 int euler_tour_tree::ni = 1;

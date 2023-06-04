@@ -14,7 +14,7 @@ struct li_chao{
         return ide;
       }
     }
-  };
+  };///
  
   struct Node{
     Line line;
@@ -35,6 +35,7 @@ struct li_chao{
   }
  
   li_chao(T mi , T ma) : MI(mi), MA(ma) , root(nullptr){}
+  ///
  
   Node * insert(Node * p,T l,T r,Line & line){
     if(l > r) {
@@ -60,7 +61,7 @@ struct li_chao{
       p->rhs = insert(p->rhs , mid + 1, r , line);
     }
     return p;
-  }
+  }///
 
   Node* insert_rec(Node* p, T l, T r, Line line, T a, T b) {
     if(r < a || b < l) {
@@ -79,7 +80,7 @@ struct li_chao{
     p->lhs = insert_rec(p->lhs, l, mid, line, a, b);
     p->rhs = insert_rec(p->rhs, mid + 1, r, line, a, b);
     return p;
-  }
+  }///
  
   void add_line(T a,T b){
     Line l(a , b);
@@ -89,7 +90,7 @@ struct li_chao{
   void add_line_range(T a, T b, T l, T r) {
     Line line(a, b);
     root = insert_rec(root, MI, MA, line, l, r);
-  }
+  }///
  
   T get(Node * p,T l,T r,T t){
     if(!p) return ide;
@@ -111,7 +112,7 @@ struct li_chao{
     }
     T mid = (l + r) / 2;
     return comp_get(get_rec(p, l, mid, t, a, b), get_rec(p, mid + 1, r, t, a, b));
-  }
+  }///
  
   T get(T x){
     return get(root,MI,MA,x);
@@ -120,4 +121,4 @@ struct li_chao{
   T get_range(T x, T l, T r) {
     return get_rec(root, MI, MA, l, r);
   }
-};
+};///

@@ -12,7 +12,7 @@ struct matrix {
     }
     return mat;
   }
-};
+};///
 
 template<class T>
 matrix<T> operator+(const matrix<T>& lm, const matrix<T>& rm) {
@@ -23,7 +23,7 @@ matrix<T> operator+(const matrix<T>& lm, const matrix<T>& rm) {
     }
   }
   return ret;
-}
+}///
 template<class T>
 matrix<T> operator*(const matrix<T>& lm, const matrix<T>& rm) {
   matrix<T> ret(lm.N, rm.M);
@@ -35,7 +35,7 @@ matrix<T> operator*(const matrix<T>& lm, const matrix<T>& rm) {
     }
   }
   return ret;
-}
+}///
 
 template<class T>
 matrix<T> operator*(const matrix<T>& lm, const T& r) {
@@ -46,7 +46,7 @@ matrix<T> operator*(const matrix<T>& lm, const T& r) {
     }
   }
   return ret;
-}
+}///
  
 template<class T>
 matrix<T> matrix_pow(matrix<T> mat, int r) {
@@ -57,4 +57,4 @@ matrix<T> matrix_pow(matrix<T> mat, int r) {
     r >>= 1;
   }
   return ret;
-}
+}///

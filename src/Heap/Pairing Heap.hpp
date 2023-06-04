@@ -10,6 +10,7 @@ struct pairing_heap {
   node* root;
   Compare comp;
   pairing_heap() : sz(0), root(nullptr) {  }
+  ///
   node* merge(node* x, node* y) {
     if(!y) return x;
     if(!x) return y;
@@ -17,7 +18,7 @@ struct pairing_heap {
     y->next = x->head;
     x->head = y;
     return x;
-  }
+  }///
   node* mergeList(node * x) {
     node* nn = nullptr;
     while(x) {
@@ -40,31 +41,31 @@ struct pairing_heap {
       x = merge(j,x);
     }
     return x;
-  }
+  }///
   
   T top() {
     return root->val;
-  }
+  }///
 
   void pop() {
     --sz;
     node* te = root;
     root = mergeList(root->head);
     delete te, te = nullptr;
-  }
+  }///
   
   void push(const T& x) {
     ++sz;
     root = merge(new node(x), root);
-  }
+  }///
   
   int size() {
     return sz;
-  }
+  }///
   
   void meld(pairing_heap<T,Compare>& h) {
     root = merge(root, h.root);
     h.root = nullptr;
     h.sz = 0;
-  }
+  }///
 };

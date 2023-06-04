@@ -4,12 +4,12 @@ namespace lctree {
     int a;
     R(): a(0) {}
     R(int a): a(a) {}
-  };
+  };///
   struct V {
     int a;
     V(): a(0) {}
     V(int a): a(a) {}
-  };
+  };///
   inline V compress(const V& a, const V& b) { return V(a.a + b.a); }
   inline V rake_merge(const V& a, const R& b) { return V(a.a + b.a); }
   inline V reverse(const V& a) { return a; }
@@ -26,14 +26,14 @@ namespace lctree {
     bool rev;
     node(): rev(false) { c[0] = c[1] = c[2] = 0; }
     node& operator[](int d) { return n[c[d]]; }
-  };
+  };///
 
   inline int new_node(V v) { n[ni].v = v; n[ni].f = v; return ni++; }
   inline void reverse(int i) {
     n[i].v = reverse(n[i].v);
     n[i].f = reverse(n[i].f);
     n[i].rev ^= true;
-  }
+  }///
   inline void push(int i) {
     if(n[i].rev) {
       swap(n[i].c[0], n[i].c[1]);
@@ -41,11 +41,11 @@ namespace lctree {
       if(n[i].c[1]) reverse(n[i].c[1]);
       n[i].rev = false;
     }
-  }
+  }///
   inline void fix(int i) {
     push(i);
     n[i].f = compress(compress(n[i][0].f, n[i].v), rake_merge(n[i][1].f, n[i].r));
-  }
+  }///
 
   inline int child_dir(int i) {
     if(n[i].c[2]) {
@@ -53,7 +53,7 @@ namespace lctree {
       else if(n[i][2].c[1] == i) { return 1; }
     }
     return 3;
-  }
+  }///
 
   inline void rotate(int x, int dir) {
     int p = n[x].c[2];
@@ -66,7 +66,7 @@ namespace lctree {
     if(x_dir < 2) n[p].c[x_dir] = y;
     fix(n[x].c[dir ^ 1]);
     fix(x);
-  }
+  }///
 
   void splay(int i) {
     push(i);
@@ -85,7 +85,7 @@ namespace lctree {
       else push(j), push(i), rotate(j, child_dir(i) ^ 1);
     }
     fix(i);
-  }
+  }///
 
   int expose(int i) {
     int right = 0;
@@ -101,7 +101,7 @@ namespace lctree {
     }
     splay(ii);
     return ii;
-  }
+  }///
 
   void link(int i, int j) {
     if(!i || !j) return;
@@ -109,7 +109,7 @@ namespace lctree {
     expose(j);
     n[n[j].c[2] = i].c[1] = j;
     fix(i);
-  }
+  }///
 
   void cut(int i) {
     if(!i) return;
@@ -117,14 +117,14 @@ namespace lctree {
     int p = n[i].c[0];
     n[i].c[0] = n[p].c[2] = 0;
     fix(i);
-  }
+  }///
 
   void evert(int i) {
     if(!i) return;
     expose(i);
     reverse(i);
     push(i);
-  }
+  }///
 
   node n[505050];
   int ni = 1;
@@ -132,5 +132,5 @@ namespace lctree {
   int all_tree(int i) {
     expose(i);
     return n[i].f.a;
-  }
+  }///
 }

@@ -13,7 +13,7 @@ struct strongly_connected_components {
   void add_edge(int a, int b) {
     g[a].push_back(b);
     rg[b].push_back(a);
-  }
+  }///
  
   void dfs(int v) {
     vis[v] = 1;
@@ -21,7 +21,7 @@ struct strongly_connected_components {
       if(!vis[t]) dfs(t);
     }
     vs.push_back(v);
-  }
+  }///
  
   void rdfs(int v, int k) {
     vis[v] = 1;
@@ -30,7 +30,7 @@ struct strongly_connected_components {
     for(auto to: rg[v]) {
       if(!vis[to]) rdfs(to, k);
     }
-  }
+  }///
  
   void build() {
     for(int i = 0; i < g.size(); i++) {
@@ -44,7 +44,7 @@ struct strongly_connected_components {
         rdfs(vs[i], groups++);
       }
     }
-  }
+  }///
  
   vector<vector<int>> build_compressed_graph() {
     vector<vector<int>> cg(groups);
@@ -54,5 +54,5 @@ struct strongly_connected_components {
       }
     }
     return cg;
-  }
+  }///
 };

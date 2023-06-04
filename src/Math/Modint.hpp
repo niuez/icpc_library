@@ -6,7 +6,7 @@ template<i64 MD> struct modint {
   M& s(i64 v) {
     a = v < MD ? v : v - MD;
     return *this;
-  }
+  }///
   i64 value() const { return a; }
   M inv() const { return this->pow(MD-2); }
   M pow(i64 r) const {
@@ -18,7 +18,7 @@ template<i64 MD> struct modint {
       r >>= 1;
     }
     return ans;
-  }
+  }///
   M& operator+=(M r) { return s(a + r.a); }
   M& operator-=(M r) { return s(a + MD - r.a); }
   M& operator*=(M r) { return s(a * r.a % MD); }
@@ -28,5 +28,6 @@ template<i64 MD> struct modint {
   M operator*(M r) const { return M(*this) *= r; }
   M operator/(M r) const { return M(*this) /= r; }
   M operator-() const { return M(0) - M(*this); }
+  ///
 };
 template<const i64 MD> ostream& operator<<(ostream& os, const modint<MD>& m) { return os << m.value(); }

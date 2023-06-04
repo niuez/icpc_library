@@ -3,26 +3,26 @@ struct swag {
   using T = int;
   static T ide() {
     return 0;
-  }
+  }///
   static T ope(const T& a, const T& b) {
     return a + b;
-  }
+  }///
 
   stack<T> left_v, right_v, left_f, right_f;
 
   swag() {
     left_f.push(ide());
     right_f.push(ide());
-  }
+  }///
 
   void push(T val) {
     left_f.push(ope(left_f.top(), val));
     left_v.push(move(val));
-  }
+  }///
 
   T fold() {
     return ope(right_f.top(), left_f.top());
-  }
+  }///
 
   void pop() {
     if(right_f.size() == 1) {
@@ -35,5 +35,5 @@ struct swag {
     }
     right_f.pop();
     right_v.pop();
-  }
+  }///
 };

@@ -15,7 +15,7 @@ struct euler_tour_tree {
     T Sigma;
     node(): sz(1) {}
     inline node& operator[](int d) { return n[c[d]]; }
-  };
+  };///
 
   int new_edge(int s, int d, bool hi) {
     int i = ni++;
@@ -25,7 +25,7 @@ struct euler_tour_tree {
     n[i].sz = n[ri].sz = 0;
     n[i].flag = hi;
     return i;
-  }
+  }///
 
   static void fix(int i) {
     n[i].sz = (n[i].s == n[i].d) ? 1 : 0;
@@ -38,7 +38,7 @@ struct euler_tour_tree {
     n[i].Sigma = n[i].val;
     if(n[i].c[0]) n[i].Sigma += n[i][0].Sigma;
     if(n[i].c[1]) n[i].Sigma += n[i][1].Sigma;
-  }
+  }///
 
   static int child_dir(int i) {
     if(n[i].c[2]) {
@@ -46,7 +46,7 @@ struct euler_tour_tree {
       else if(n[i][2].c[1] == i) { return 1; }
     }
     return 2;
-  }
+  }///
 
   static void rotate(int x, int dir) {
     int p = n[x].c[2];
@@ -59,7 +59,7 @@ struct euler_tour_tree {
     if(x_dir < 2) n[p].c[x_dir] = y;
     if(n[x].c[dir ^ 1]) fix(n[x].c[dir ^ 1]);
     fix(x);
-  }
+  }///
 
   static void splay(int i) {
     int i_dir;
@@ -74,7 +74,7 @@ struct euler_tour_tree {
       else rotate(j, i_dir ^ 1);
     }
     fix(i);
-  }
+  }///
 
   static int merge_back(int l, int r) {
     if(!l) return r;
@@ -84,7 +84,7 @@ struct euler_tour_tree {
     n[n[r].c[2] = l].c[1] = r;
     fix(l);
     return l;
-  }
+  }///
 
   static pair<int, int> split(int i) {
     splay(i);
@@ -92,13 +92,13 @@ struct euler_tour_tree {
     n[i].c[0] = n[l].c[2] = 0;
     fix(i);
     return { l, i };
-  }
+  }///
 
   static void reroot(int v) {
     auto p = split(v);
     merge_back(p.second, p.first);
     splay(v);
-  }
+  }///
 
   static bool same_root(int i, int j) {
     if(i) splay(i);
@@ -106,7 +106,7 @@ struct euler_tour_tree {
     while(n[i].c[2]) i = n[i].c[2];
     while(n[j].c[2]) j = n[j].c[2];
     return i == j;
-  }
+  }///
 
   int n_start;
   unordered_map<long long, int> emp;
@@ -116,12 +116,12 @@ struct euler_tour_tree {
     for(int i = 0; i < N; i++) {
       n[i + n_start].s = n[i + n_start].d = i;
     }
-  }
+  }///
 
   bool edge_exist(int x, int y) {
     if(x > y) swap(x, y);
     return emp.count(((long long)x << 32) | (long long)y);
-  }
+  }///
 
   void link(int x, int y, bool hi) {
     if(x > y) swap(x, y);
@@ -136,7 +136,7 @@ struct euler_tour_tree {
     n[n[y].c[2] = ei].c[1] = y;
     fix(ei);
     merge_back(ei, ei + 1);
-  }
+  }///
 
   void cut(int x, int y) {
     if(x > y) swap(x, y);
@@ -167,17 +167,17 @@ struct euler_tour_tree {
       n[right].c[2] = 0;
       merge_back(left, right);
     }
-  }
+  }///
 
   bool same_tree(int x, int y) {
     return same_root(x + n_start, y + n_start);
-  }
+  }///
 
   int tree_size(int x) {
     x += n_start;
     splay(x);
     return n[x].sz;
-  }
+  }///
 
   void subedge_set(int x, bool val) {
     x += n_start;
@@ -185,19 +185,19 @@ struct euler_tour_tree {
     if(val) n[x].flag |= (0b0100);
     else n[x].flag &= ~(0b0100);
     fix(x);
-  }
+  }///
 
   void add_val(int x, T val) {
     x += n_start;
     splay(x);
     n[x].val += val;
     fix(x);
-  }
+  }///
   T tree_sum(int x) {
     x += n_start;
     splay(x);
     return n[x].Sigma;
-  }
+  }///
 
   template<class Func>
   void hilevel_edges(int v, Func f) {
@@ -216,7 +216,7 @@ struct euler_tour_tree {
         else i = n[i].c[1];
       }
     }
-  }
+  }///
   template<class Func>
   int subedges(int v, Func f) {
     int i = v + n_start;
@@ -235,7 +235,7 @@ struct euler_tour_tree {
       }
     }
     return 0;
-  }
+  }///
 
 };
 
@@ -250,7 +250,7 @@ struct online_dynamic_connectivity {
   online_dynamic_connectivity(int N): N(N) {
     ett.emplace_back(N);
     E.emplace_back(N);
-  }
+  }///
 
   void link(int x, int y) {
     if(ett[0].same_tree(x, y)) {
@@ -262,7 +262,7 @@ struct online_dynamic_connectivity {
     else {
       ett[0].link(x, y, true);
     }
-  }
+  }///
 
   void replace(int x, int y, int level) {
     for(int k = 0; k < level; k++) {
@@ -295,7 +295,7 @@ struct online_dynamic_connectivity {
         });
       if(res) return;
     }
-  }
+  }///
 
   void cut(int x, int y) {
     for(int k = 0; k < ett.size(); k++) {
@@ -316,18 +316,18 @@ struct online_dynamic_connectivity {
         replace(x, y, k + 1);
       }
     }
-  }
+  }///
   void add_val(int x, long long val) {
     ett[0].add_val(x, val);
-  }
+  }///
   int size(int x) {
     return ett[0].tree_size(x);
-  }
+  }///
   long long sum(int x) {
     return ett[0].tree_sum(x);
-  }
+  }///
   bool same(int x, int y) {
     return ett[0].same_tree(x, y);
-  }
+  }///
 };
 

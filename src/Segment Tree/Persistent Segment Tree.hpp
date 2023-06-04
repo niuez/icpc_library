@@ -9,7 +9,7 @@ struct persistent_segment_tree {
     node(T data): data(data), left(), right() {}
     node(T data, Ptr left, Ptr right)
       : data(data), left(left), right(right) {}
-  };
+  };///
 
   using Ptr = node*;
 
@@ -17,7 +17,7 @@ struct persistent_segment_tree {
   static T ide() { return {(int)(1e18), (int)(1e18)}; }
 
   Ptr root;
-  int N;
+  int N;///
 
   static Ptr build(int l, int r, const vector<T>& init) {
     if(l + 1 >= r) return new node(init[l]);
@@ -27,7 +27,7 @@ struct persistent_segment_tree {
       T da = ope(le->data, ri->data);
       return new node(da, le, ri);
     }
-  }
+  }///
 
   static Ptr update(Ptr node, int i, T val, int l, int r) {
     if(i == l && i + 1 == r) return new struct node(val);
@@ -42,7 +42,7 @@ struct persistent_segment_tree {
       right = update(node->right, i, val, (l + r) >> 1, r);
     }
     return new struct node(ope(left->data, right->data), left, right);
-  }
+  }///
 
   static T sum(Ptr node, int a, int b, int l, int r) {
     if(b <= l || r <= a) return ide();
@@ -51,7 +51,7 @@ struct persistent_segment_tree {
         sum(node->left, a, b, l, (l + r) >> 1),
         sum(node->right, a, b, (l + r) >> 1, r)
         );
-  }
+  }///
 
   persistent_segment_tree(const vector<T>& init)
     : root(build(0, init.size(), init)), N(init.size()) {}
@@ -60,4 +60,4 @@ struct persistent_segment_tree {
     return persistent_segment_tree(update(root, i, x, 0, N), N);
   }
   T sum(int l, int r) { return sum(root, l, r, 0, N); }
-};
+}; ///

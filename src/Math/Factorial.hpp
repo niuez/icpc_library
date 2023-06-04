@@ -20,4 +20,4 @@ struct factorial {
       i[k] = f[k - 1] * g[k];
     }
   }
-};
+};///

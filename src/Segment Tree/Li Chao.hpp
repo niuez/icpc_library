@@ -25,6 +25,7 @@ struct li_chao{
   }
  
   li_chao(T mi , T ma) : MI(mi), MA(ma) , root(nullptr){}
+  ///
  
   Node * insert(Node * p,T l,T r,Line & line){
     if(l > r) {
@@ -47,7 +48,7 @@ struct li_chao{
       p->rhs = insert(p->rhs , mid + 1, r , line);
     }
     return p;
-  }
+  }///
  
   void add_line(T a,T b){
     Line l(a , b);
@@ -64,4 +65,4 @@ struct li_chao{
   T get(T x){
     return get(root,MI,MA,x);
   }
-};
+};///

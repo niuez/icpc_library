@@ -28,7 +28,7 @@ vector<pair<int, int>> gabow_edmonds(const vector<vector<int>>& gra){
         }
       }
     }
-  }
+  }///
   vector<int> mate(N + 1 , 0);
   vector<int> label(N + 1 , -1);
   vector<int> first(N + 1 , 0);
@@ -39,7 +39,7 @@ vector<pair<int, int>> gabow_edmonds(const vector<vector<int>>& gra){
     if(label[first[x]] < 0) return first[x];
     first[x] = eval_first(first[x]);
     return first[x];
-  };
+  };///
 
   // サブルーチンR
   function<void(int, int)> rematch = [&](int v, int w){
@@ -59,7 +59,7 @@ vector<pair<int, int>> gabow_edmonds(const vector<vector<int>>& gra){
       rematch(x , y);
       rematch(y , x);
     }
-  };
+  };///
 
   function<void(int, int, int)> assignLabel = [&](int x, int y, int num){
     // L0
@@ -102,7 +102,7 @@ vector<pair<int, int>> gabow_edmonds(const vector<vector<int>>& gra){
     // L5は遅延評価しているため不要
     // L6
     return;
-  };
+  };///
 
   function<bool(int)> augment_check = [&](int u){
     // E1 後半
@@ -135,7 +135,7 @@ vector<pair<int, int>> gabow_edmonds(const vector<vector<int>>& gra){
       }
     }
     return false;
-  };
+  };///
 
   for(int i = 1;i <= N;i++){
     // E1
@@ -145,13 +145,13 @@ vector<pair<int, int>> gabow_edmonds(const vector<vector<int>>& gra){
       // E7
       fill(label.begin(), label.end(), -1);
     }
-  }
+  }///
 
   vector<pair<int, int>> ans;
   for(int i = 1;i <= N;i++){
     if(i < mate[i]){
       ans.push_back({i , mate[i]});
     }
-  }
+  }///
   return ans;
 }

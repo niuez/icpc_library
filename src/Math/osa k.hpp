@@ -13,11 +13,11 @@ struct osa_k {
       }
     }
     return res;
-  }
+  }///
 
   void build(int n) {
     min_fact = min_prime_factor(n);
-  }
+  }///
 
   // O(logN)
   vector<pair<T, int>> prime_factors(int n) const {
@@ -30,7 +30,7 @@ struct osa_k {
       n /= min_fact[n];
     }
     return res;
-  }
+  }///
   
   // The divisors are not sorted
   // O(logN + |divisors|)
@@ -62,5 +62,5 @@ struct osa_k {
         acc[i] = acc[i + 1];
       }
     }
-  }
+  }///
 };

@@ -1,4 +1,4 @@
-const double pi = std::acos(-1);
+const double pi = std::acos(-1);///
 
 vector<complex<double>> fast_fourier_transform(vector<complex<double>> a) {
   int n = a.size();
@@ -15,7 +15,7 @@ vector<complex<double>> fast_fourier_transform(vector<complex<double>> a) {
     }
   }
   return a;
-}
+}///
 
 vector<complex<double>> inverse_fast_fourier_transform(vector<complex<double>> a) {
   int n = a.size();
@@ -34,4 +34,4 @@ vector<complex<double>> inverse_fast_fourier_transform(vector<complex<double>> a
   int inv_n = 1 / (double)n;
   for(int i = 0;i < n;i++) a[i] *= inv_n;
   return a;
-}
+}///

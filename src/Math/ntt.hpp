@@ -19,7 +19,7 @@ constexpr i64 NTT_PRIMES[][2] = {
     {469762049, 3},  // 2^26 * 7 + 1
     {167772161, 3},  // 2^25 * 5 + 1
 };
-
+///
 template<const i64 mod, const i64 primitive>
 vector<modint<mod>> number_theoretic_transform(vector<modint<mod>> a) {
   i64 n = a.size();
@@ -36,7 +36,7 @@ vector<modint<mod>> number_theoretic_transform(vector<modint<mod>> a) {
     }
   }
   return a;
-}
+}///
 
 template<const i64 mod, const i64 primitive>
 vector<modint<mod>> inverse_number_theoretic_transform(vector<modint<mod>> a) {
@@ -56,4 +56,4 @@ vector<modint<mod>> inverse_number_theoretic_transform(vector<modint<mod>> a) {
   auto inv_n = modint<mod>(n).pow(mod - 2);
   for(int i = 0;i < n;i++) a[i] *= inv_n;
   return a;
-}
+}///

@@ -13,7 +13,7 @@ void multiple_transform(vector<T> &a) {
 	for (int i = 0; ++i != n;) {
 		a[i] += a[0];
 	}
-}
+}///
 
 template <class T>
 void inverse_multiple_transform(vector<T> &a) {
@@ -30,4 +30,4 @@ void inverse_multiple_transform(vector<T> &a) {
 			}
 		}
 	}
-}
+}///

@@ -12,7 +12,7 @@ struct segment_tree_chminmaxadd_rsq {
     int len;
     int add;
     node(): gst2(NINF), gcnt(1), lst2(INF), lcnt(1), len(1), add(0) {}
-  };
+  };///
 
   vector<node> v;
 
@@ -57,7 +57,7 @@ struct segment_tree_chminmaxadd_rsq {
       p.lst2 = min(l.lst2, r.lst2);
     }
 
-  }
+  }///
 
   segment_tree_chminmaxadd_rsq() {}
   segment_tree_chminmaxadd_rsq(const vector<int>& vec) {
@@ -74,7 +74,7 @@ struct segment_tree_chminmaxadd_rsq {
       fix(i);
       v[i].len = v[i * 2 + 0].len + v[i * 2 + 1].len;
     }
-  }
+  }///
 
   void eff_add(int k, T x) {
     auto& p = v[k];
@@ -84,7 +84,7 @@ struct segment_tree_chminmaxadd_rsq {
     p.add += x;
     if(p.gst2 != NINF) p.gst2 += x;
     if(p.lst2 !=  INF) p.lst2 += x;
-  }
+  }///
 
   void eff_chmin(int k, T x) {
     auto& p = v[k];
@@ -98,7 +98,7 @@ struct segment_tree_chminmaxadd_rsq {
     else {
       p.gst1 = x;
     }
-  }
+  }///
 
   void eff_chmax(int k, T x) {
     auto& p = v[k];
@@ -112,7 +112,7 @@ struct segment_tree_chminmaxadd_rsq {
     else {
       p.lst1 = x;
     }
-  }
+  }///
 
   void push(int k) {
     if(k >= n) return;
@@ -127,7 +127,7 @@ struct segment_tree_chminmaxadd_rsq {
 
     if(p.lst1 > v[k * 2 + 0].lst1) eff_chmax(k * 2 + 0, p.lst1);
     if(p.lst1 > v[k * 2 + 1].lst1) eff_chmax(k * 2 + 1, p.lst1);
-  }
+  }///
 
   void infuse(int k) {
     k = k >> __builtin_ctz(k);
@@ -151,7 +151,7 @@ struct segment_tree_chminmaxadd_rsq {
       int rc = __builtin_ctz(r);
       for(int i = hh + 1; i --> rc;) push(r >> i);
     }
-  }
+  }///
 
   void subtree_chmin(int k, T x) {
     if(v[k].gst1 <= x) return;
@@ -163,7 +163,7 @@ struct segment_tree_chminmaxadd_rsq {
     subtree_chmin(k * 2 + 0, x);
     subtree_chmin(k * 2 + 1, x);
     fix(k);
-  }
+  }///
 
   void subtree_chmax(int k, T x) {
     if(x <= v[k].lst1) return;
@@ -175,7 +175,7 @@ struct segment_tree_chminmaxadd_rsq {
     subtree_chmax(k * 2 + 0, x);
     subtree_chmax(k * 2 + 1, x);
     fix(k);
-  }
+  }///
 
   void range_chmin(int a, int b, T x) {
     int l = a + n;
@@ -189,7 +189,7 @@ struct segment_tree_chminmaxadd_rsq {
     }
     infuse(a + n);
     infuse(b + n);
-  }
+  }///
 
   void range_chmax(int a, int b, T x) {
     int l = a + n;
@@ -203,7 +203,7 @@ struct segment_tree_chminmaxadd_rsq {
     }
     infuse(a + n);
     infuse(b + n);
-  }
+  }///
 
   void range_add(int a, int b, T x) {
     int l = a + n;
@@ -217,7 +217,7 @@ struct segment_tree_chminmaxadd_rsq {
     }
     infuse(a + n);
     infuse(b + n);
-  }
+  }///
 
   T range_sum(int l, int r) {
     l += n;
@@ -232,5 +232,5 @@ struct segment_tree_chminmaxadd_rsq {
       r >>= 1;
     }
     return lx + rx;
-  }
+  }///
 };

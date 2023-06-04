@@ -8,7 +8,7 @@ struct adjucency_matrix_equation {
     G[v].emplace_back(u + V, E);
     G[u].emplace_back(v, E);
     E++;
-  }
+  }///
   
   template<class T>
   vector<T> solve(const vector<T>& c) const {
@@ -36,5 +36,5 @@ struct adjucency_matrix_equation {
       if(y != T(0)) return vector<T>();
     }
     return ans;
-  }
+  }///
 };

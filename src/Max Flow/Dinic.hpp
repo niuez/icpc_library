@@ -14,7 +14,7 @@ struct dinic {
   void add_edge(int from, int to, C cap, C rev_cap = 0) {
     g[from].push_back({ to, cap, (int)(g[to].size()) });
     g[to].push_back({ from, rev_cap, (int)(g[from].size() - 1) });
-  }
+  }///
   
   vector<int> level;
   vector<int> iter;
@@ -32,7 +32,7 @@ struct dinic {
       return f;
     }
     return 0;
-  }
+  }///
 
   C max_flow(int s, int t) {
     vector<int> que(n);
@@ -60,5 +60,5 @@ struct dinic {
       }
     }
     return flow;
-  }
+  }///
 };

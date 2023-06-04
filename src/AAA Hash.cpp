@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 using namespace std;
-//BEGIN CUT HERE
 signed main(){
   const int MOD = 1e9+7,B=1e8+7;
   long long res=0;
@@ -14,10 +13,12 @@ signed main(){
       res=(res*B+c)%MOD;
     }
     cout<<s;
-    if(s=="  }") cout<<" // "<<res;
+    if(s.size() >= 3 && s.substr(s.size() - 3, 3)=="///") {
+      cout << res;
+      res = 0;
+    }
     cout<<endl;
   }
   cout<<res<<endl;
   return 0;
-}
-//END CUT HERE
+}///

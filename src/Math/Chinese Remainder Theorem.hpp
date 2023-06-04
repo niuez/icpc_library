@@ -7,7 +7,7 @@ tuple<long long, long long, long long> ext_gcd(long long a, long long b) {
     return tuple<long long, long long, long long>{ g, p, q-a/b*p };
   }
   ;
-}
+}///
 tuple<long long, long long> chinese_remainder_theorem(vector<tuple<long long, long long>> const& tms) {
   long long r = 0ll;
   long long M = 1ll;
@@ -22,4 +22,4 @@ tuple<long long, long long> chinese_remainder_theorem(vector<tuple<long long, lo
     M = M*(m/g);
   };
   return tuple<long long, long long>{ (r%M+M)%M, M };
-}
+}///

@@ -6,6 +6,7 @@ struct bit_matrix {
 
   bitset<W>& operator[](int i) { return m[i]; }
   const bitset<W>& operator[](int i) const { return m[i]; }
+  ///
 
   template<const int X>
   bit_matrix<H, X> operator*(const bit_matrix<W, X>& r) const {
@@ -18,7 +19,7 @@ struct bit_matrix {
       ans[i][j] = (m[i] & tr[j]).count() & 1;
     }
     return ans;
-  }
+  }///
 };
 
 template<const int H, const int W>
@@ -43,6 +44,6 @@ vector<int> gauss_jordan(bit_matrix<H, W>& A, bool is_extended = false) {
     }
     fst.push_back(j);
     rank++;
-  }
+  }///
   return fst;
 }

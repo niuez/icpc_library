@@ -28,7 +28,7 @@ const vector<int>& sa_is(vector<T> s, int k) {
       lms.push_back(i + 1);
     }
     bin[s[i] + 1]++;
-  }
+  }///
 
   for(int i = 1;i <= k;i++)
     bin[i] += bin[i - 1];
@@ -61,6 +61,7 @@ const vector<int>& sa_is(vector<T> s, int k) {
       }
     }
   };
+  ///
 
   induce(lms);
 
@@ -105,4 +106,4 @@ const vector<int>& sa_is(vector<T> s, int k) {
   }
 
   return sa;
-}
+}///

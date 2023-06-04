@@ -37,4 +37,4 @@ vector<T> newton_interpolation(vector<pair<T, T>> ps) {
     swap(c, next);
   }
   return ans;
-}
+}///

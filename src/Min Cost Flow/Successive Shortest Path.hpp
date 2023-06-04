@@ -12,30 +12,12 @@ struct ssp {
   vector<vector<edge>> g;
 
   ssp(int n, int s, int t): n(n), s(s), t(t), g(n) {}
+  ///
+  ///
   void add_edge(int from, int to, int cap, int cost) {
     g[from].push_back({ from, to, cap, cost, (int)(g[to].size()) });
     g[to].push_back({ to, from, 0, -cost, (int)(g[from].size() - 1) });
-  }
-  vector<int> level;
-  vector<int> iter;
-  C dinic_dfs(int v, C f) {
-    if(v == t) return f;
-    else {
-      C now = f;
-      for(int& i = iter[v]; i < g[v].size(); i++) {
-        auto& e = g[v][i];
-        if(e.cap > 0 && level[e.to] > level[e.from]) {
-          C c = min(now , e.cap);
-          C d = dinic_dfs(e.to, c);
-          e.cap -= d;
-          g[e.to][e.rev].cap += d;
-          now -= d;
-          if(now == 0) return f - now;
-        }
-      }
-      return f - now;
-    }
-  }
+  }///
 
   C min_cost_flow(C f) {
     vector<C> po(n,0);
@@ -86,6 +68,6 @@ struct ssp {
     }
     if(f != 0) return -1;
     return ans;
-  }
+  }///
 };
 

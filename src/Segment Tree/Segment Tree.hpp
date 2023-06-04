@@ -10,7 +10,7 @@ struct segment_tree {
     node.resize(2 * n, ide());
     for(int i = 0;i < init.size();i++) node[i + n] = init[i];
     for(int i = n; i --> 1;) node[i] = ope(node[i * 2], node[i * 2 + 1]);
-  }
+  }///
  
   void update(int i, T x) {
     i += n;
@@ -37,7 +37,7 @@ struct segment_tree {
 
   const T& at(int i) const {
     return node[i + n];
-  }
+  }///
 
   template<class F>
   int subtree_down_first(int i, T lx, F isok) const {
@@ -75,5 +75,5 @@ struct segment_tree {
       r >>= 1;
     }
     return -1;
-  }
+  }///
 };

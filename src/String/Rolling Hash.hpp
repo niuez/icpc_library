@@ -11,7 +11,7 @@ struct hash_bases {
       x -= MOD;
     }
     return x;
-  }
+  }///
 
   inline static u64 mul(u64 a, u64 b) {
     u64 ac = a >> 31;
@@ -21,7 +21,7 @@ struct hash_bases {
     u64 x = ac * b + bc * a;;
     x = ac * bc * 2 + (x >> 30) + ((x & ((1ull << 30) - 1)) << 31) + a * b;
     return mod(x);
-  }
+  }///
   
   hash_bases(vector<u64> bs, int M) : N(bs.size()), bases(M, vector<u64>(N, 1)) {
     for(int i = 1; i < M; i++) {
@@ -29,12 +29,13 @@ struct hash_bases {
         bases[i][j] = mul(bases[i - 1][j], bs[j]);
       }
     }
-  }
+  }///
 
   u64 operator()(int i, int r) {
     return bases[r][i];
   }
 } bases(vector<u64> { 9973, 10007 }, 202020);
+///
 
 struct rhash {
   static const u64 MOD = hash_bases::MOD;
@@ -47,7 +48,7 @@ struct rhash {
     for(int i = 0; i < bases.N; i++) {
       h[i] = x;
     }
-  }
+  }///
 
   rhash next(u64 r) const {
     rhash ans;
@@ -56,7 +57,7 @@ struct rhash {
     }
     ans.len = len + r;
     return ans;
-  }
+  }///
 
   rhash& operator+=(const rhash& r) {
     for(int i = 0;i < bases.N; i++) {
@@ -65,7 +66,7 @@ struct rhash {
     }
     len = max(len, r.len);
     return (*this);
-  }
+  }///
 
   rhash& operator-=(const rhash& r) {
     for(int i = 0;i < bases.N; i++) {
@@ -77,7 +78,7 @@ struct rhash {
       }
     }
     return (*this);
-  }
+  }///
 
   rhash operator+(const rhash& r) const { return rhash(*this) += r; }
   rhash operator-(const rhash& r) const { return rhash(*this) -= r; }
@@ -87,5 +88,5 @@ struct rhash {
       OK &= h[i] == r.h[i];
     }
     return OK;
-  }
+  }///
 };

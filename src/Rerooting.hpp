@@ -17,7 +17,7 @@ vector<T> rerooting(const vector<vector<E>>& G, int r, U ide, To to, Adj adj, Op
       que[qi++] = t;
     }
     MAX = max(MAX, (int)G[v].size() + 1);
-  }
+  }///
  
   for(int i = qi; i --> 0;) {
     int v = que[i];
@@ -28,7 +28,7 @@ vector<T> rerooting(const vector<vector<E>>& G, int r, U ide, To to, Adj adj, Op
       sum = ope(sum, adj(tdp[t], e));
     }
     tdp[v] = merge(sum, v);
-  }
+  }///
  
   vector<U> f(MAX);
   vector<U> b(MAX);
@@ -50,6 +50,6 @@ vector<T> rerooting(const vector<vector<E>>& G, int r, U ide, To to, Adj adj, Op
       }
     }
     tdp[v] = merge(f[G[v].size()], v);
-  }
+  }///
   return tdp;
 }

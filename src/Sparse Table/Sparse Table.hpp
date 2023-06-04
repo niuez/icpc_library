@@ -4,6 +4,7 @@ struct sparse_table {
 
   int N;
   vector<vector<Band>> table;
+  ///
 
   sparse_table(vector<Band> arr) : N(arr.size()) {
     table.resize(__lg(N) + 1);
@@ -19,10 +20,10 @@ struct sparse_table {
         table[k][i] = ope(table[k - 1][i], table[k - 1][i + (1 << (k - 1))]);
       }
     }
-  }
+  }///
   // [s, t)
   Band query(int s, int t) {
     int k = __lg(t - s);
     return ope(table[k][s], table[k][t - (1 << k)]);
-  }
+  }///
 };

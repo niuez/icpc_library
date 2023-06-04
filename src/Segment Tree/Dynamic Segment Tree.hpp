@@ -8,14 +8,15 @@ struct dynamic_segment_tree {
     node* right;
     T val;
     node(T v): val(v), left(nullptr), right(nullptr) {}
-  };
+  };///
 
   int n;
   node* root;
   dynamic_segment_tree(const int sz): root(new node(ide())) {
     n = 1;
     while(n < sz) n *= 2;
-  }
+  }///
+
   T value(node* n) {
     if(n) return n->val;
     else return ide();
@@ -40,7 +41,7 @@ struct dynamic_segment_tree {
       }
       n->val = ope(value(n->left), value(n->right));
     }
-  }
+  }///
 
   T get(node* n, int a, int b, int l, int r) {
     if(!n) return ide();
@@ -55,5 +56,5 @@ struct dynamic_segment_tree {
 
   T sum(int a, int b) {
     return get(root, a, b, 0, n);
-  }
+  }///
 };

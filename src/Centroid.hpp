@@ -12,7 +12,7 @@ struct CentroidDecomposition {
       sz[v] += calc_size(u, v);
     }
     return sz[v];
-  }
+  }///
 
   void centroid_build(int v, int p) {
     int tot = calc_size(v, -1);
@@ -37,5 +37,5 @@ struct CentroidDecomposition {
         centroid_build(u, v);
       }
     }
-  }
+  }///
 };
