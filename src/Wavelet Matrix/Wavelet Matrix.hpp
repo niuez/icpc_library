@@ -1,110 +1,100 @@
-class bitvector {
-  using B = uint_least64_t;
-  static constexpr int wordsize = 64;
-  
-  vector<B> bit;
-  vector<int> sum;
-  
-public:
+struct bitv {
+  using B = uint_fast64_t;
+  const static int W = 64;
 
-  bitvector() : bit(), sum() {} 
-  bitvector(const int size)
-    : bit(size / wordsize + 1, 0), sum(size / wordsize + 1, 0) {}
+  static B popcnt(B x) {
+    return __builtin_popcountll(x);
+  }
+
+  vector<B> b;
+  vector<int> s;
+
+  bitv() : b(), s() {} 
+  bitv(const int size)
+    : b(size / W + 1, 0), s(size / W + 1, 0) {}
 
   void set(const int i) {
-    bit[i / wordsize] |= static_cast<B>(1) << (i % wordsize);
+    b[i / W] |= B(1) << (i % W);
   }
   void build() {
-    for (int i = 1; i < bit.size(); i++) {
-      sum[i] = sum[i - 1] + __builtin_popcountll(bit[i - 1]);
+    rep(i, 1, b.size()) {
+      s[i] = s[i - 1] + popcnt(b[i - 1]);
     }
   }
 
   int at(const int i) const {
-    return bit[i / wordsize] >> (i % wordsize);
+    return b[i / W] >> (i % W);
   }
 
   // count of ones in [0, i)
-  int rank(const int i) const {
-    return sum[i / wordsize]
-      + __builtin_popcountll(bit[i / wordsize] & (static_cast<B>(1) << (i % wordsize)) - 1);
-  }
-
-  // count of ones in [0, i)
-  int rank(const int i, const int b) const {
-    int ans = sum[i / wordsize]
-      + __builtin_popcountll(bit[i / wordsize] & (static_cast<B>(1) << (i % wordsize)) - 1);
-    if(b) return ans;
-    else return i - ans;
+  int rank(const int i, const int v) const {
+    int ans = s[i / W] + popcnt(b[i / W] & (B(1) << (i % W)) - 1);
+    return v ? ans : i - ans;
   }
 };
 
-class wavelet_matrix {
+class WM {
   using I = int;
 
-
-  const int depth;
-  const int len;
-  vector<bitvector> mat;
-  vector<int> spl;
+  const int D;
+  const int L;
+  vector<bitv> m;
+  vector<int> s;
 
 public:
 
-  wavelet_matrix(const vector<I>& arr, int de)
-    : depth(de),
-      len(arr.size()),
-      mat(vector<bitvector>(depth, bitvector(arr.size()))),
-      spl(vector<int>(depth, 0)) {
-        vector<int> idx(len);
-        vector<int> left(len), right(len);
-        for(int i = 0;i < len;i++) idx[i] = i;
-        for(int d = depth; d-- > 0;) {
-          int l = 0, r = 0;
-          
-          for(int i = 0; i < len; i++) {
-            int k = (arr[idx[i]] >> d) & 1;
-            if(k) right[r++] = idx[i], mat[d].set(i);
-            else left[l++] = idx[i];
-          }
-          mat[d].build();
-          spl[d] = l;
-          swap(idx, left);
-          for(int i = 0; i < r; i++) idx[i + l] = right[i];
-        }
+  WM(const vector<I>& A, int de): D(de), L(A.size()) {
+    m.resize(D, bitv(A.size()));
+    s.resize(D, 0);
+    vector<int> p(L);
+    vector<int> le(L), ri(L);
+    rep(i, 0, L) p[i] = i;
+    rrep(d, D, 0) {
+      int l = 0, r = 0;
+      rep(i, 0, L) {
+        int k = (A[p[i]] >> d) & 1;
+        if(k) ri[r++] = p[i], m[d].set(i);
+        else le[l++] = p[i];
       }
+      m[d].build();
+      s[d] = l;
+      swap(p, le);
+      rep(i, 0, r) p[i + l] = ri[i];
+    }
+  }
 
   I at(int i) const {
-    I x = static_cast<I>(0);
-    for(int d = depth; d-- > 0;) {
-      int k = mat[d].at(i);
-      x |= (static_cast<I>(k) << d);
-      i = mat[d].rank(i, k) + spl[d] * k;
+    I x = 0;
+    rrep(d, D, 0) {
+      I k = m[d].at(i);
+      x |= (k << d);
+      i = m[d].rank(i, k) + s[d] * k;
     }
     return x;
   }
 
-  // counting elements that equal to x in range [left, right)
-  int rank_x(int left, int right, I x) const {
-    for(int d = depth; d-- > 0;) {
+  // counting elements that equal to x in range [l, r)
+  int rank_x(int l, int r, I x) const {
+    rrep(d, D, 0) {
       int k = ((x >> d) & 1);
-      left = mat[d].rank(left, k) + spl[d] * k;
-      right = mat[d].rank(right, k) + spl[d] * k;
+      l = m[d].rank(l, k) + s[d] * k;
+      r = m[d].rank(r, k) + s[d] * k;
     }
-    return right - left;
+    return r - l;
   }
 
   // sorted(arr[left..right])[i]
-  I quantile(int left, int right, int i) const {
-    I x = static_cast<I>(0);
-    for(int d = depth; d-- > 0;) {
-      int cnt = mat[d].rank(right, 0) - mat[d].rank(left, 0);
+  I quantile(int l, int r, int i) const {
+    I x = 0;
+    rrep(d, D, 0) {
+      int cnt = m[d].rank(r, 0) - m[d].rank(l, 0);
       int k = (i < cnt) ? 0 : 1;
       if(k == 1) {
         i -= cnt;
-        x |= (1 << d);
+        x |= (I(1) << d);
       }
-      left = mat[d].rank(left, k) + spl[d] * k;
-      right = mat[d].rank(right, k) + spl[d] * k;
+      l = m[d].rank(l, k) + s[d] * k;
+      r = m[d].rank(r, k) + s[d] * k;
     }
     return x;
   }
@@ -118,10 +108,10 @@ public:
   // couting elements that less than x, equal to x, and more than x in range [left, right)
   rank_result rank_less_eq_more(int left, int right, I x) const {
     int le = 0, mo = 0;
-    for(int d = depth; d --> 0;) {
+    rrep(d, D, 0) {
       int k = (x >> d) & 1;
-      int l = mat[d].rank(left, 1);
-      int r = mat[d].rank(right, 1);
+      int l = m[d].rank(left, 1);
+      int r = m[d].rank(right, 1);
       if(k == 0) {
         mo += r - l;
         left -= l;
@@ -129,8 +119,8 @@ public:
       }
       else {
         le += (right - left) - (r - l);
-        left = l + spl[d];
-        right = r + spl[d];
+        left = l + s[d];
+        right = r + s[d];
       }
     }
     return rank_result { le, right - left, mo };
@@ -146,15 +136,16 @@ public:
     }
     else {
       d--;
-      int lr = mat[d].rank(left, 1);
-      int rr = mat[d].rank(right, 1);
+      int lr = m[d].rank(left, 1);
+      int rr = m[d].rank(right, 1);
       return
         rangefreq(left - lr, right - rr, x, y, l, d) +
-        rangefreq(lr + spl[d], rr + spl[d], x, y, l + (1 << d), d);
+        rangefreq(lr + s[d], rr + s[d], x, y, l + (I(1) << d), d);
     }
   }
 
   int rangefreq(int left, int right, I x, I y) const {
-    return rangefreq(left, right, x, y, 0, depth);
+    return rangefreq(left, right, x, y, 0, D);
   }
 };
+
