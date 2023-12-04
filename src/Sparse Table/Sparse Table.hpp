@@ -1,29 +1,31 @@
 struct sparse_table {
-  using Band = int;
-  inline Band ope(const Band& a, const Band b) { return min(a, b); }
+  using B = int;
+  inline static B ope(const B& a, const B& b) {
+    return std::min(a, b);
+  }
 
   int N;
-  vector<vector<Band>> table;
-  ///
+  vector<vector<B>> t;
 
-  sparse_table(vector<Band> arr) : N(arr.size()) {
-    table.resize(__lg(N) + 1);
+  sparse_table(vector<B> A) {
+    N = A.size();
+    t.resize(bit_width((uint32_t)N) + 1);
 
-    table[0].resize(N);
+    t[0].resize(N);
     for(int i = 0;i < N;i++) {
-      table[0][i] = arr[i];
+      t[0][i] = A[i];
     }
 
     for(int k = 1;(1 << k) <= N;k++) {
-      table[k].resize(N);
+      t[k].resize(N);
       for(int i = 0;i + (1 << k) <= N;i++) {
-        table[k][i] = ope(table[k - 1][i], table[k - 1][i + (1 << (k - 1))]);
+        t[k][i] = ope(t[k - 1][i], t[k - 1][i + (1 << (k - 1))]);
       }
     }
-  }///
-  // [s, t)
-  Band query(int s, int t) {
-    int k = __lg(t - s);
-    return ope(table[k][s], table[k][t - (1 << k)]);
-  }///
+  }
+  // [a, b)
+  B query(int a, int b) {
+    int k = std::bit_width((std::uint32_t)(b - a)) - 1;
+    return ope(t[k][a], t[k][b - (1 << k)]);
+  }
 };
